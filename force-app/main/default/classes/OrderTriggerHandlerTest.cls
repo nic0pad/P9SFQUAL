@@ -2,7 +2,7 @@
 private class OrderTriggerHandlerTest {
     @isTest static void testCalculateNetAmountWithShipment() {
 
-      TestDataFactory.createTestRecords(100);
+      TestDataFactory.createOrders(1000, 100);
 
       List<Order> orders = [SELECT Id, TotalAmount, AccountId, Status, NetAmount__c, ShipmentCost__c FROM Order];
 
@@ -13,7 +13,7 @@ private class OrderTriggerHandlerTest {
 
     @isTest static void testCalculateNetAmountWithoutShipment() {
 
-      TestDataFactory.createTestRecords(null);
+      TestDataFactory.createOrders(1000, null);
 
       List<Order> orders = [SELECT Id, TotalAmount, AccountId, Status, NetAmount__c, ShipmentCost__c FROM Order];
 
