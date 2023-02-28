@@ -1,22 +1,20 @@
+/**
+ * Data Factory used in Unit Test to create Test objects
+ * 
+ * @author Nicolas Padiou
+ */
 @IsTest
-// Data Factory to create Test object used in Unit Test
 public class TestDataFactory {
   /**
    * Create a test object Order
+   * 
+   * @param unitPrice The unit product price in the order
+   * @param shipmentCost The shipment cost of the order
+   * @param account The account of the order
+   * 
+   * @return an instance of Order
    */
-  public static Order createOrder(Decimal unitPrice, Decimal shipmentCost) {
-    // Create Product
-    Product2 product = TestDataFactory.createProduct();
-
-    // Generate Pricebook Id
-    Id pricebookId = Test.getStandardPricebookId();
-    
-    // Create a PricebookEntry
-    PricebookEntry standardPrice = TestDataFactory.createPricebookEntry(pricebookId, product, unitPrice);
-
-    // Create an Account
-    Account account = TestDataFactory.createAccount();
-    
+  public static Order createOrder(Decimal shipmentCost, Account account, Id pricebookId) {
     Date startDate = System.today().addDays(-1);
 
     // Create a Contract
@@ -31,21 +29,37 @@ public class TestDataFactory {
       PriceBook2Id = pricebookId,
       ShipmentCost__c = shipmentCost
     );
-    insert order;
 
-    OrderItem orderItem = new OrderItem(
-      OrderId = order.id,
-      Quantity = 1,
-      UnitPrice = unitPrice,
-      Product2id = product.id,
-      PricebookEntryId = standardPrice.id
-    );
-    insert orderItem;
+    insert order;
     
     return order;
   }
 
-  // Create a test product
+  /**
+   *  Create a test object Order
+   * 
+   * @param orderId Id of the order
+   * @param product A product object
+   * @param unitPrice Price of the product
+   * @param quantity Quantity of product
+   * @param standardPriceId Id of the standard price
+   */
+  public static OrderItem createOrderItem(Id orderId, Product2 product, Decimal unitPrice, Integer quantity, Id standardPriceId) {
+    OrderItem orderItem = new OrderItem(
+      OrderId = orderId,
+      Quantity = quantity,
+      UnitPrice = unitPrice,
+      Product2id = product.Id,
+      PricebookEntryId = standardPriceId
+    );
+    return orderItem;
+  }
+
+  /**
+   * Create a test product
+   * 
+   * @return an instance of Product
+   */
   public static Product2 createProduct() {
     Product2 product = new Product2(
       Name = 'Test Product',
@@ -58,10 +72,15 @@ public class TestDataFactory {
     return product;
   }
 
-  // Create a test account
-  public static Account createAccount() {
+  /**
+   * Create a test account
+   * @param name The name of the account
+   * 
+   * @return an instance of Account
+   */
+  public static Account createAccount(String name) {
     Account account = new Account(
-      Name='TestAccount',
+      Name = name,
       Industry = 'Banking'
     );
     insert account;
@@ -69,7 +88,14 @@ public class TestDataFactory {
     return account;
   }
 
-  // Create a test contract
+  /**
+   * Create a test contract
+   * 
+   * @param account The account attached to the contract
+   * @param startDate The start date of the contract
+   * 
+   * @return an instance of Contract
+   */
   public static Contract createContract(Account account, Date startDate) {
     Contract contract = new Contract(
       AccountId=account.Id,
@@ -82,7 +108,15 @@ public class TestDataFactory {
     return contract;
   }
 
-  // Create a PricebookEntry test
+  /**
+   * Create a PricebookEntry test
+   * 
+   * @param pricebookId The id of the pricebook
+   * @param product The product attached to the pricebook entry
+   * @param unitPrice The unit price of the pricebook entry
+   * 
+   * @return an instance of PricebookEntry
+   */
   public static PricebookEntry createPricebookEntry(Id pricebookId, Product2 product, Decimal unitPrice){
     PricebookEntry standardPrice = new PricebookEntry(
       Pricebook2Id = pricebookId,
