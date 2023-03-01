@@ -81,7 +81,8 @@ public class TestDataFactory {
   public static Account createAccount(String name) {
     Account account = new Account(
       Name = name,
-      Industry = 'Banking'
+      Industry = 'Banking',
+      Chiffre_d_affaire__c = 0
     );
     insert account;
 
@@ -98,12 +99,15 @@ public class TestDataFactory {
    */
   public static Contract createContract(Account account, Date startDate) {
     Contract contract = new Contract(
-      AccountId=account.Id,
-      Status='Draft',
+      AccountId = account.Id,
+      Status = 'Draft',
       StartDate = startDate,
-      ContractTerm=10
+      ContractTerm = 10
     );
     insert contract;
+
+    contract.Status = 'Activated';
+    update contract;
 
     return contract;
   }
