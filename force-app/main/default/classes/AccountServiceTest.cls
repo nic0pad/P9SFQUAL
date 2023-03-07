@@ -13,10 +13,13 @@ public class AccountServiceTest {
     // Create test Accounts
     Set<Id> accountIds = new Set<Id>();
     Account account1 = TestDataFactory.createAccount('TestAccount1');
+    insert account1;
     accountIds.add(account1.Id);
     Account account2 = TestDataFactory.createAccount('TestAccount2');
+    insert account2;
     accountIds.add(account2.Id);
     Account account3 = TestDataFactory.createAccount('TestAccount3');
+    insert account3;
     accountIds.add(account3.Id);
 
     // Create Product
@@ -36,8 +39,11 @@ public class AccountServiceTest {
      */
     Set<Id> orderIds = new Set<Id>();
     Order order1 = TestDataFactory.createOrder(100, account1, pricebookId);
+    insert order1;
     Order order2 = TestDataFactory.createOrder(200, account1, pricebookId);
+    insert order2;
     Order order3 = TestDataFactory.createOrder(100, account2, pricebookId);
+    insert order3;
 
     // Add products to order
     List<OrderItem> orderItems = new List<OrderItem>();

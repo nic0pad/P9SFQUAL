@@ -18,7 +18,7 @@ public class TestDataFactory {
     Date startDate = System.today().addDays(-1);
 
     // Create a Contract
-    Contract contract = TestDataFactory.createContract(account, startDate);
+    Contract contract = TestDataFactory.insertContract(account, startDate);
 
     // Create a new order
     Order order = new Order(
@@ -29,8 +29,6 @@ public class TestDataFactory {
       PriceBook2Id = pricebookId,
       ShipmentCost__c = shipmentCost
     );
-
-    insert order;
     
     return order;
   }
@@ -84,20 +82,19 @@ public class TestDataFactory {
       Industry = 'Banking',
       Chiffre_d_affaire__c = 0
     );
-    insert account;
 
     return account;
   }
 
   /**
-   * Create a test contract
+   * Insert a test contract
    * 
    * @param account The account attached to the contract
    * @param startDate The start date of the contract
    * 
    * @return an instance of Contract
    */
-  public static Contract createContract(Account account, Date startDate) {
+  public static Contract insertContract(Account account, Date startDate) {
     Contract contract = new Contract(
       AccountId = account.Id,
       Status = 'Draft',
@@ -132,5 +129,50 @@ public class TestDataFactory {
     insert standardPrice ;
 
     return standardPrice;
+  }
+
+  /**
+   * Create a test contract
+   * 
+   * @param account The account attached to the contract
+   * @param startDate The start date of the contract
+   * 
+   * @return an instance of Contract
+   */
+  public static Contract createContract(Id accountId) {
+    Date startDate = System.today().addDays(-1);
+    Contract contract = new Contract(
+      AccountId = accountId,
+      Status = 'Draft',
+      StartDate = startDate,
+      ContractTerm = 10
+    );
+    return contract;
+  }
+
+  /**
+   * Create a test object Order
+   * 
+   * @param shipmentCost The shipment cost of the order
+   * @param accountId The account Id of the order
+   * @param pricebookId The pricebook Id of the order
+   * @param contractId The contract Id of the order
+   * 
+   * @return an instance of Order
+   */
+  public static Order createOrder(Decimal shipmentCost, Id accountId, Id pricebookId, Id contractId) {
+    Date startDate = System.today().addDays(-1);
+
+    // Create a new order
+    Order order = new Order(
+      ContractId = contractId,
+      AccountId = accountId,
+      EffectiveDate = startDate,
+	    Status = 'Draft',
+      PriceBook2Id = pricebookId,
+      ShipmentCost__c = shipmentCost
+    );
+    
+    return order;
   }
 }

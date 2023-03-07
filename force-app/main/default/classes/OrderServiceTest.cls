@@ -17,11 +17,15 @@ public class OrderServiceTest {
 
     // Create an test Account
     Account account = TestDataFactory.createAccount('TestAccount');
+    insert account;
 
     // Create 3 orders with and without shipment cost
     Order order1 = TestDataFactory.createOrder(100, account, pricebookId);
+    insert order1;
     Order order2 = TestDataFactory.createOrder(200, account, pricebookId);
+    insert order2;
     Order order3 = TestDataFactory.createOrder(null, account, pricebookId);
+    insert order3;
 
     // Add products to order
     List<OrderItem> orderItems = new List<OrderItem>();
@@ -68,8 +72,11 @@ public class OrderServiceTest {
   @isTest static void testGetAccountIdsWithOrderedOrder() {
     // Create test Accounts
     Account account1 = TestDataFactory.createAccount('TestAccount1');
+    insert account1;
     Account account2 = TestDataFactory.createAccount('TestAccount2');
+    insert account2;
     Account account3 = TestDataFactory.createAccount('TestAccount3');
+    insert account3;
 
     // Create Product
     Product2 product = TestDataFactory.createProduct();
@@ -88,8 +95,11 @@ public class OrderServiceTest {
      */
     Set<Id> orderIds = new Set<Id>();
     Order order1 = TestDataFactory.createOrder(100, account1, pricebookId);
+    insert order1;
     Order order2 = TestDataFactory.createOrder(200, account2, pricebookId);
+    insert order2;
     Order order3 = TestDataFactory.createOrder(100, account3, pricebookId);
+    insert order3;
 
     // Add products to order
     List<OrderItem> orderItems = new List<OrderItem>();
