@@ -4,8 +4,14 @@ private class AccountBatchUpdateCATest {
   static void setup() {
     // Saved in a map, differents prices for each account
     Map<Integer, Decimal> price = new Map<Integer, Decimal>();
+
     // Create accounts
     List<Account> accounts = new List<Account>();
+    // Create an account with no orders but with existing value in field "Chiffre_d_affaire__c"
+    Account a = TestDataFactory.createAccount('TestAccount');
+    a.Chiffre_d_affaire__c = 20000;
+    accounts.add(a);
+    // Create accounts with orders
     for (Integer i=0;i<10;i++) {
       price.put(i, 1000 * (i+1));
       accounts.add(TestDataFactory.createAccount('TestAccount' + i));
@@ -14,7 +20,7 @@ private class AccountBatchUpdateCATest {
 
     // Create Contract for each account
     List<Contract> contracts = new List<Contract>();
-    for (Account account : [SELECT Id FROM Account ORDER BY Name]) {
+    for (Account account : [SELECT Id FROM Account WHERE Name <> 'TestAccount' ORDER BY Name]) {
       contracts.add(TestDataFactory.createContract(account.Id));
     }
     insert contracts;
@@ -32,10 +38,9 @@ private class AccountBatchUpdateCATest {
     // and activated each contract
     List<Order> orders = new List<Order>();
     contracts = new List<Contract>();
-    for (Account account : [SELECT Id FROM Account ORDER BY Name]) {
-      Contract contract = [SELECT Id, Status FROM Contract WHERE AccountId = :account.Id];
+    for (Contract contract : [SELECT Id, AccountId, Status FROM Contract ORDER BY AccountId]) {
       for (Integer i=0;i<120;i++) {
-        orders.add(TestDataFactory.createOrder(null, account.Id, pricebookId, contract.Id));
+        orders.add(TestDataFactory.createOrder(null, contract.AccountId, pricebookId, contract.Id));
       }
       contract.Status = 'Activated';
       contracts.add(contract);
@@ -48,7 +53,7 @@ private class AccountBatchUpdateCATest {
     orders = new List<Order>();
     List<OrderItem> orderItems = new List<OrderItem>();
     Integer indexPrice = 0;
-    for (Account account : [SELECT Id FROM Account ORDER BY Name]) {
+    for (Account account : [SELECT Id FROM Account WHERE Name <> 'TestAccount' ORDER BY Name]) {
       Decimal unitPrice = price.get(indexPrice);
       for (Order order : [SELECT Id, Status FROM Order WHERE AccountId = :account.Id]) {
         orderItems.add(TestDataFactory.createOrderItem(order.Id, product, unitPrice, 1, standardPrice.Id));
@@ -67,7 +72,7 @@ private class AccountBatchUpdateCATest {
     Database.executeBatch(batch);
     Test.stopTest();
     // Check if the CA field is equal to the expected CA
-    Integer indexPrice = 1;
+    Integer indexPrice = 0;
     for (Account account : [SELECT Id, Chiffre_d_affaire__c FROM Account ORDER BY Name]) {
       Decimal expectedCA = 1000 * indexPrice * 120;
       System.assertEquals(expectedCA, account.Chiffre_d_affaire__c);
