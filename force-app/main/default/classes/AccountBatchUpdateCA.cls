@@ -5,7 +5,7 @@
  */
 public class AccountBatchUpdateCA implements Database.Batchable<SObject> {
   public Database.QueryLocator start(Database.BatchableContext bc) {
-    // Select all account
+    // Select all accounts
     return Database.getQueryLocator('SELECT Id FROM Account');
   }
   public void execute(Database.BatchableContext bc, List<Account> records) {

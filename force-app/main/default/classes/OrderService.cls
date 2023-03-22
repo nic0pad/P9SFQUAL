@@ -30,8 +30,10 @@ public with sharing class OrderService {
     return accoundIds;
   }
 
-    /**
+  /**
    * Get Total CA of orders
+   * 
+   * @return Decimal TotalCA
    */
   @AuraEnabled(cacheable=true)
   public static Decimal getTotalCA(){
@@ -44,6 +46,8 @@ public with sharing class OrderService {
 
   /**
    * Get orders by owner
+   * 
+   * @return Map<String,List<Order>> contains orders by owner
    */
   @AuraEnabled(cacheable=true)
   public static Map<String,List<Order>> getOrdersByOwner(){

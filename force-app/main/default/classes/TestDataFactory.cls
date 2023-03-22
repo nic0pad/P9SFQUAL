@@ -41,6 +41,8 @@ public class TestDataFactory {
    * @param unitPrice Price of the product
    * @param quantity Quantity of product
    * @param standardPriceId Id of the standard price
+   * 
+   * @return an instance of OrderItem
    */
   public static OrderItem createOrderItem(Id orderId, Product2 product, Decimal unitPrice, Integer quantity, Id standardPriceId) {
     OrderItem orderItem = new OrderItem(
