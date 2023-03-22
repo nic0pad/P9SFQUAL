@@ -3,7 +3,7 @@ private class ScheduleAccountUpdateCATest {
   // Dummy CRON expression: midnight on March 15.
   // Because this is a test, job executes
   // immediately after Test.stopTest().
-  public static String CRON_EXP = '0 0 0 15 3 ? 2023';
+  public static String CRON_EXP = '0 0 0 15 3 ? 2024';
   @isTest static void test() {
     // Verify that AsyncApexJob is empty
     // not strictly necessary but makes what is going on later clearer
@@ -24,7 +24,7 @@ private class ScheduleAccountUpdateCATest {
     System.assertEquals(0, ct.TimesTriggered);
 
     // Verify the next time the job will run
-    System.assertEquals('2023-03-15 00:00:00', String.valueOf(ct.NextFireTime));
+    System.assertEquals('2024-03-15 00:00:00', String.valueOf(ct.NextFireTime));
 
     Test.stopTest();
 

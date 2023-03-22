@@ -1,17 +1,17 @@
 import { LightningElement, wire } from 'lwc';
-import getTotalCA from '@salesforce/apex/OrderController.getTotalCA';
+import getTotalCA from '@salesforce/apex/OrderService.getTotalCA';
 
 export default class TeamOrders extends LightningElement {
-  data;
+  totalCA;
   error;
+
   @wire(getTotalCA) totalCA({data, error}) {
     if (data) {
-      this.data = data;
+      this.totalCA = data;
       this.error = undefined;
     } else if (error) {
       this.error = error;
-      this.data = undefined;
+      this.totalCA = undefined;
     }
   };
-  valeur = 1000;
 }

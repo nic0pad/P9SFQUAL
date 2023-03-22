@@ -1,0 +1,30 @@
+<template>
+  <lightning-card title="Orders by Commercial" icon-name="utility:money">
+    <template if:true={listOrdersByOwner}>
+      <template for:each={listOrdersByOwner} for:item="owner">
+        <p key={owner.key} class="slds-p-horizontal_medium"><b>{owner.key}</b></p>
+        <table key={owner.key} class="slds-table slds-table_bordered slds-table_cell-buffer slds-table_col-bordered">
+          <thead>
+            <tr class="slds-text-title_caps">
+                <th scope="col">
+                    <div title="Key">Command Id</div>
+                </th>
+                <th scope="col">
+                    <div title="Value">Total Amount</div>
+                </th>
+            </tr>
+          </thead>
+          <tbody>
+            <template for:each={owner.value} for:item="order">
+              <tr key={order.Id}>
+                <td scope="col"><div>{order.Id}</div></td>
+                <td scope="col"><div>{order.TotalAmount} €</div></td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </template>
+    </template>
+    <p>{error}</p>
+  </lightning-card>
+</template>
