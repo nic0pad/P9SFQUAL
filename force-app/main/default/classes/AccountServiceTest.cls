@@ -74,10 +74,6 @@ public class AccountServiceTest {
     account = [SELECT Id, Chiffre_d_affaire__c FROM Account WHERE Id = :account3.Id];
     System.assertEquals(0, account.Chiffre_d_affaire__c);
 
-    // Update order2 Status to Activated
-    order2.Status = 'Activated';
-    update order2;
-
     // Update order3 Status to Ordered
     order3.Status = 'Ordered';
     update order3;
