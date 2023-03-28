@@ -4,25 +4,13 @@
  * @author Nicolas Padiou
  */
 trigger OrderTrigger on Order (before update, after update) {
-  if (Trigger.isUpdate) {
-    if (Trigger.isBefore) {
-      // Calculate the NetAmount field for each order
-      for (Order o : Trigger.new) {
-        OrderService.calculateNetAmount(o);
-      }
-    }
-    else if (Trigger.isAfter) {
-      // set list of Order Id to update
-      Set<Id> orderIds = new Set<Id>();
-      for (Order o : Trigger.new) {
-        orderIds.add(o.Id);
-      }
-      
-      // get accounts with ordered order
-      Set<Id> accountIds = OrderService.getAccountIdsWithOrderedOrder(orderIds);
+  // calculate Net Amount for each order
+  if (Trigger.isUpdate && Trigger.isBefore) {
+    OrderService.calculateNetAmount(Trigger.new);
+  }
 
-      // update CA field for each account
-      AccountService.updateCA(accountIds);
-    }
+  // update account CA for each order
+  if (Trigger.isUpdate && Trigger.isAfter) {
+    OrderService.updateCA(Trigger.new);
   }
 }

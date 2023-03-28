@@ -7,12 +7,34 @@ public with sharing class OrderService {
   /**
    * Calculate NetAmount field : TotalAmount - ShipmentCost
    * 
-   * @param order : an order
+   * @param orders : list of orders
    */
-  public static void calculateNetAmount(Order o) {
-      Decimal shipmentCost = 0;
-      if (o.ShipmentCost__c != null) shipmentCost = o.ShipmentCost__c;
-      o.NetAmount__c = o.TotalAmount - shipmentCost;
+  public static void calculateNetAmount(List<Order> orders) {
+      // Calculate the NetAmount field for each order
+      for (Order o : orders) {
+        Decimal shipmentCost = 0;
+        if (o.ShipmentCost__c != null) shipmentCost = o.ShipmentCost__c;
+        o.NetAmount__c = o.TotalAmount - shipmentCost;
+      }
+  }
+
+  /**
+   * update the CA account for each order
+   * 
+   * @param orders : list of orders
+   */
+  public static void updateCA(List<Order> orders) {
+    // set list of Order Id to update
+    Set<Id> orderIds = new Set<Id>();
+    for (Order o : orders) {
+      orderIds.add(o.Id);
+    }
+    
+    // get accounts with ordered order
+    Set<Id> accountIds = OrderService.getAccountIdsWithOrderedOrder(orderIds);
+
+    // update CA field for each account
+    AccountService.updateCA(accountIds);
   }
 
   /**
